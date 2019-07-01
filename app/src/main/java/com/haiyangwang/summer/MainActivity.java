@@ -1,35 +1,58 @@
 package com.haiyangwang.summer;
 
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.haiyangwang.summer.HomePage.HomePageApiManager;
+import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerResultCallBackDelegate;
+import com.haiyangwang.summer.NetWork.VVBaseApiManager;
+
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ApiManagerResultCallBackDelegate {
 
     private static final String TAG = "MainActivity";
-    private Map<String,String > cache = new HashMap<>();
+    private HomePageApiManager homePageApiManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        getHomePageApiManager().loadData();
 
+    }
 
-        cache.put("DATA","i want a apple");
-        cache.put("CACHETIME","1");
-        cache.put("UPDATETIME","12");
+    @Override
+    public void managerCallApiDidSuccess(VVBaseApiManager manager) {
 
-        try{
-            JSONObject json = new JSONObject(cache);
+        if (manager.equals(HomePageApiManager.class)) {
+            Log.d(TAG,"success"+manager.fetchResponseDataWithReformer(null));
+        }
+    }
 
-            Log.d(TAG,"json 数据  = \t"+json);
-        } catch (Exception e) {
-            Log.d(TAG,"json 数据  = \t"+e.getMessage());
+    @Override
+    public void managerCallApiManagerFaild(VVBaseApiManager manager) {
+
+        if (manager.getClass().equals(HomePageApiManager.class)) {
+            Log.d(TAG,"HomePageApiManager faild"+manager);
         }
 
+        if (manager.getClass().equals(HomePageApiManager.class)) {
+            Log.d(TAG,"HomePageApiManager faild"+manager.fetchFailureReason());
+        }
+    }
+
+    public HomePageApiManager getHomePageApiManager() {
+        if (homePageApiManager == null) {
+            homePageApiManager = new HomePageApiManager();
+            homePageApiManager.setmDelegate(new WeakReference<>(this));
+        }
+        return  homePageApiManager;
     }
 }

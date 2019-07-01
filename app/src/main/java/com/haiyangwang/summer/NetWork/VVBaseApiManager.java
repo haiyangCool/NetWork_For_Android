@@ -1,5 +1,7 @@
 package com.haiyangwang.summer.NetWork;
 
+import android.util.Log;
+
 import com.haiyangwang.summer.NetWork.CacheCenter.VVCacheCenter;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManager;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerInterceptor;
@@ -14,6 +16,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 
 public abstract class VVBaseApiManager extends Object {
@@ -23,7 +27,8 @@ public abstract class VVBaseApiManager extends Object {
     private static final String defaultException = "没有进行网络请求";
     private static final String timeOut = "请求超时";
     private static final String parameterException = "参数错误";
-    private static final String netException = "网络异常:您的网络似乎已断开";
+    private static final String netException = "网络异常";
+    private static final String loseNet = "您似乎断开了网络连接";
     private static final String resultNotCorrect = "服务器数据异常";
     private static final String serviceDataDecodeError = "服务器数据解析出错";
     private static final String noException = "未发生错误";
@@ -71,6 +76,7 @@ public abstract class VVBaseApiManager extends Object {
     // 加载数据
     public int loadData() {
         if (isLoading) { return 0; }
+
         Map<String,String> mps = null;
         if (mParamSource != null) {
             mps = mParamSource.get().getParametersForApi(this);
@@ -135,6 +141,12 @@ public abstract class VVBaseApiManager extends Object {
     // api request
     private int loadDataWithParams(Map<String,String > params) {
 
+        if (mChild != null) {
+            mService = mChild.get().getService();
+        }else {
+            throw new SecurityException("---------mChild 必须实现---------") ;
+
+        }
         // 请求Api之前询问拦截器是否允许
         if (!beforePerformCallApiWithParams(params)) {
             return 0;
@@ -182,7 +194,7 @@ public abstract class VVBaseApiManager extends Object {
         }
 
         if (!getIsHaveNetLink()) {
-            failureMessage = netException;
+            failureMessage = loseNet;
             faildCallApi(rawResponse, VVPublicDefines.RequestFailureType.netException);
             return 0;
         }
@@ -202,6 +214,7 @@ public abstract class VVBaseApiManager extends Object {
 
             @Override
             public void responseFaild(VVURLResponse response) {
+
                 faildCallApi(response,VVPublicDefines.RequestFailureType.defaultException);
 
             }
@@ -295,7 +308,6 @@ public abstract class VVBaseApiManager extends Object {
         }
         rawResponse.setmLog(VVLog.logApiRequestWithResponse(response,failureMessage));
 
-        // 主线程异步
         beforePerformSuccessWithResponse(rawResponse);
         if (mDelegate != null) {
             mDelegate.get().managerCallApiDidSuccess(this);
@@ -327,12 +339,12 @@ public abstract class VVBaseApiManager extends Object {
         }
         rawResponse.setmLog(VVLog.logApiRequestWithResponse(response,failureMessage));
 
+
         // 如果服务提供（Service）可以处理该错误，就不向下传递
         if (mService != null && mService.get().handleFailure(this,response,failureType)) {
             return;
         }
 
-        // 在这里需要回到主线程异步执行
         beforePerformFailureWithResponse(rawResponse);
 
         if (mDelegate != null) {

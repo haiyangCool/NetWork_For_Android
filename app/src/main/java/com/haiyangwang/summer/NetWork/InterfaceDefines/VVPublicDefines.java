@@ -40,6 +40,8 @@ public class VVPublicDefines {
         parameterException,
         //返回的数据异常
         resultNotCorrect,
+        //断开了网络连接
+        loseNet,
         //网络异常
         netException,
         // 服务器数据解析出错

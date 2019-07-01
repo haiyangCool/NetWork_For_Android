@@ -1,6 +1,8 @@
 package com.haiyangwang.summer.NetWork;
 
 
+import android.util.Log;
+
 import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 
 import java.io.IOException;
@@ -46,6 +48,8 @@ public class VVNetProxy extends Object {
 
     // Get
     public Number getApiRequest(String apiAddress, Map<String, String> params, final VVNetResponseCallBack callBack) {
+
+        Log.d("Test2","response");
 
         return startRequestWith("GET",apiAddress,params,callBack);
 
@@ -117,6 +121,7 @@ public class VVNetProxy extends Object {
                         requestParams,
                         faildRequest.hashCode(),
                         e);
+
                 callBack.responseFaild(response);
 
             }

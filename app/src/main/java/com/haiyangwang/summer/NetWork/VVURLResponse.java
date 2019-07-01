@@ -149,8 +149,10 @@ public class VVURLResponse extends Object {
 
     private VVURLResponseStatus expectionStatus(Exception exception) {
 
-        if (exception == null) {return  VVURLResponseStatus.success;}
-        if (exception.getCause().equals(SocketTimeoutException.class)) {
+
+        if (exception == null) { return  VVURLResponseStatus.success;}
+
+        if (exception.equals(SocketTimeoutException.class)) {
             return  VVURLResponseStatus.timeOut;
         }
         return VVURLResponseStatus.netException;

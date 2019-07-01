@@ -38,7 +38,7 @@ public class VVLog extends Object {
             }
 
             if (response.getmException() != null) {
-                mExceptionCause = response.getmException().getCause().toString();
+                mExceptionCause = response.getmException().toString();
                 mExceptionMessage = response.getmException().getMessage();
             }
 
