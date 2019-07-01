@@ -49,8 +49,6 @@ public class VVNetProxy extends Object {
     // Get
     public Number getApiRequest(String apiAddress, Map<String, String> params, final VVNetResponseCallBack callBack) {
 
-        Log.d("Test2","response");
-
         return startRequestWith("GET",apiAddress,params,callBack);
 
     }

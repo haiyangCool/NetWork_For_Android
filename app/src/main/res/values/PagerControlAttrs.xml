@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="NumberOfPages" format="integer"/>
+    <attr name="CurrentPage" format="integer"/>
+    <attr name="HiddenForSinglePage" format="boolean"/>
+    <attr name="PageIndicatorTintColor" format="string"/>
+    <attr name="CurrentPageIndicatorTintColor" format="string"/>
+    <declare-styleable name="PagerControl">
+        <attr name="NumberOfPages"/>
+        <attr name="CurrentPage"/>
+        <attr name="HiddenForSinglePage"/>
+        <attr name="PageIndicatorTintColor"/>
+        <attr name="CurrentPageIndicatorTintColor"/>
+    </declare-styleable>
+</resources>
