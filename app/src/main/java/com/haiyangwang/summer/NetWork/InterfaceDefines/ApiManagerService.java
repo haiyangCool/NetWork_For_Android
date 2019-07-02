@@ -1,7 +1,5 @@
 package com.haiyangwang.summer.NetWork.InterfaceDefines;
 
-import android.os.Environment;
-
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
 import com.haiyangwang.summer.NetWork.VVURLResponse;
 
@@ -14,9 +12,8 @@ public interface ApiManagerService {
 
 
     /*提供服务的域名地址, Android 第三方网路库并不完全基于URLRequest进行请求的发起
-    * 所以在这里和iOS不同的地方在于，仅提供服务地址*/
+    * 所以在这里仅提供服务地址*/
     String getServiceAddress();
-
 
     /*开发环境*/
     VVPublicDefines.VVAPIEnvironmnet getEnvironment();

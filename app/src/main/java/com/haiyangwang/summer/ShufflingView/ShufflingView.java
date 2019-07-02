@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -16,7 +17,8 @@ import java.util.TimerTask;
 
 /* 轮播图*/
 public class ShufflingView extends FrameLayout implements
-        ViewPager.OnPageChangeListener{
+        ViewPager.OnPageChangeListener,
+        ShufflingViewAdapter.ShufflingViewAdapterDelegate {
 
     public interface ShufflingViewDataSource {
         /* item 数量*/
@@ -49,14 +51,14 @@ public class ShufflingView extends FrameLayout implements
     /* 是否需要刷新*/
     private boolean mIsNeedRefresh = true;
     /* ViewGroup list*/
-    private List<ViewGroup> mItemList = new ArrayList<>();
+    private List<ShufflingItem> mItemList = new ArrayList<>();
     /* itemCount*/
     private int mItemCount = 0;
 
     /* 自动切换item*/
     private Timer mTimer;
     /* 延时刷新*/
-    private Timer mRefreshTime;
+    private Timer mRefreshTimer;
 
     private Context context;
     public ShufflingView(Context context) {
@@ -73,7 +75,7 @@ public class ShufflingView extends FrameLayout implements
 
     /* Listener methods*/
 
-    //OnPageChangeListener
+    /**OnPageChangeListener*/
     @Override
     public void onPageScrolled(int i, float v, int i1) {
     }
@@ -94,7 +96,6 @@ public class ShufflingView extends FrameLayout implements
         if (mCurrentItemIndex == mItemCount) {mCurrentItemIndex = 0;}
         if (mCurrentItemIndex < 0) {mCurrentItemIndex = mItemCount-1;}
 
-
         delayRefresh();
 //        mIsNeedRefresh = false;
 //        refreshShowData();
@@ -102,12 +103,20 @@ public class ShufflingView extends FrameLayout implements
 //        startTimer();
     }
 
+    /**ShufflingViewAdapterDelegate*/
+    @Override
+    public void itemBeClicked() {
+        if (mDelegate != null) {
+            mDelegate.get().itemBeClickedAtIndex(mCurrentItemIndex);
+        }
+    }
+
     @Override
     public void onPageScrollStateChanged(int i) {
         stopAutoTimer();
     }
 
-    /* Public methods*/
+    /** Public methods*/
     public void loadData() {
         configureShuffling();
     }
@@ -193,7 +202,7 @@ public class ShufflingView extends FrameLayout implements
         mItemList.add(mRightItem);
 
         ShufflingViewAdapter adapter = new ShufflingViewAdapter(mItemList);
-
+        adapter.setDelegate(new WeakReference<>(this));
         mViewPager = new ViewPager(context);
         mViewPager.setId(mViewPagerId);
         mViewPager.setAdapter(adapter);
@@ -220,9 +229,9 @@ public class ShufflingView extends FrameLayout implements
 
     private void delayRefresh() {
         stopRefreshTimer();
-        if (mRefreshTime == null) {
-            mRefreshTime = new Timer();
-            mRefreshTime.schedule(new ShufflingDelayFreshTask(new WeakReference<>(this)),200);
+        if (mRefreshTimer == null) {
+            mRefreshTimer = new Timer();
+            mRefreshTimer.schedule(new ShufflingDelayFreshTask(new WeakReference<>(this)),200);
         }
 
     }
@@ -235,9 +244,9 @@ public class ShufflingView extends FrameLayout implements
     }
 
     private void stopRefreshTimer() {
-        if (mRefreshTime != null) {
-            mRefreshTime.cancel();
-            mRefreshTime = null;
+        if (mRefreshTimer != null) {
+            mRefreshTimer.cancel();
+            mRefreshTimer = null;
         }
     }
 

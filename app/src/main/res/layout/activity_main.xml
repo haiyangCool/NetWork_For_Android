@@ -26,4 +26,26 @@
 
    </com.haiyangwang.summer.ShufflingView.ShufflingView>
 
+   <com.haiyangwang.summer.SearchBar.SearchBar
+
+       android:id="@+id/search_bar"
+       android:layout_below="@+id/shuffling"
+       android:layout_width="match_parent"
+       android:layout_height="40dp"
+       android:background="#4ff">
+
+   </com.haiyangwang.summer.SearchBar.SearchBar>
+
+   <com.haiyangwang.summer.SearchBar.SearchView
+       android:id="@+id/search_view"
+       android:layout_below="@id/search_bar"
+       android:layout_width="match_parent"
+       android:layout_height="40dp"
+       android:background="#FF0">
+
+   </com.haiyangwang.summer.SearchBar.SearchView>
+
+
+
+
 </RelativeLayout>
