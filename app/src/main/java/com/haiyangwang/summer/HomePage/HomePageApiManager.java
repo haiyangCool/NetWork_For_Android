@@ -1,6 +1,5 @@
 package com.haiyangwang.summer.HomePage;
 
-import android.util.Log;
 
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManager;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerParameterSource;
@@ -14,7 +13,10 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomePageApiManager extends VVBaseApiManager implements ApiManager, ApiManagerValidator, ApiManagerParameterSource {
+public class HomePageApiManager extends VVBaseApiManager implements
+        ApiManager,
+        ApiManagerValidator,
+        ApiManagerParameterSource {
 
     public HomePageApiManager() {
 

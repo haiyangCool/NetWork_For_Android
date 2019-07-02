@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
    <com.haiyangwang.summer.PageControl.PagerControl
+       android:id="@+id/page_control"
        android:layout_width="wrap_content"
        android:layout_height="30dp"
        app:HiddenForSinglePage="true"
@@ -15,5 +16,14 @@
        android:layout_centerHorizontal="true">
 
    </com.haiyangwang.summer.PageControl.PagerControl>
+
+   <com.haiyangwang.summer.ShufflingView.ShufflingView
+       android:id="@+id/shuffling"
+       android:layout_below="@+id/page_control"
+       android:layout_width="match_parent"
+       android:layout_height="210dp"
+       android:background="#3fe4">
+
+   </com.haiyangwang.summer.ShufflingView.ShufflingView>
 
 </RelativeLayout>

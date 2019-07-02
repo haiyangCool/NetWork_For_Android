@@ -13,7 +13,7 @@ import com.haiyangwang.summer.R;
 
 import java.util.ArrayList;
 
-/**
+/*
  * XML 配置
  * 代码 配置
  * 考虑到一般页码控制都在10个以内，所以页码控制只显示在一行 30dp
@@ -42,24 +42,24 @@ public class PagerControl extends RelativeLayout implements View.OnClickListener
     // center line
     private ImageView centerLine;
 
-    /** 总页码*/
+    /* 总页码*/
     private int numberOfPages = 0;
-    /** 当前页码*/
+    /* 当前页码*/
     private int currentPage = 0;
-    /** 仅有一个时是否隐藏*/
+    /* 仅有一个时是否隐藏*/
     private boolean hiddenForSinglePage;
 
-    /** 页码颜色*/
+    /* 页码颜色*/
     private int pageIndicatorTintColor;
 
-    /** 当前选中的页码颜色*/
+    /* 当前选中的页码颜色*/
     private int currentPageIndicatorTintColor;
 
-    /** 当前被选中的页码*/
+    /* 当前被选中的页码*/
     private Button currentIndicator;
-    /** indicator list*/
+    /* indicator list*/
     private ArrayList<Button> indicatorList = new ArrayList<>();
-    /** delegate*/
+    /* delegate*/
     private PagerControlDelegate delegate;
 
     public PagerControl(Context context) {
