@@ -6,7 +6,8 @@ import com.haiyangwang.summer.NetWork.VVURLResponse;
 import java.util.Map;
 
 /*
- * 验证：由每个api自己实现验证*/
+ * 验证：由每个api自己实现验证
+ * 验证不提供默认正确的设置，让每个业务接口开发者一开始就对自己的参数配置和服务器是否返回数据做好验证*/
 public interface ApiManagerValidator {
 
     /* 验证由服务器返回的数据对业务方是否可用

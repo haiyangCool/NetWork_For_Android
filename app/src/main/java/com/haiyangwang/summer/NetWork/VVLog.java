@@ -18,28 +18,28 @@ public class VVLog extends Object {
         StringBuilder builder = new StringBuilder();
         builder.append("VVLog:*****************************************************  \n");
         if (response != null) {
-            if (response.getmStatus() != null) {
-                mState = response.getmStatus().toString();
+            if (response.getStatus() != null) {
+                mState = response.getStatus().toString();
             }
-            if (response.getmRequestUrl() != null) {
-                mApiName = response.getmRequestUrl();
+            if (response.getRequestUrl() != null) {
+                mApiName = response.getRequestUrl();
             }
-            if (response.getmMethod() != null) {
-                mRequestType = response.getmMethod();
+            if (response.getMethod() != null) {
+                mRequestType = response.getMethod();
             }
-            if (response.getmRequestParams() != null) {
-                mRequestParams = response.getmRequestParams().toString();
+            if (response.getRequestParams() != null) {
+                mRequestParams = response.getRequestParams().toString();
             }
-            if (response.getmContentString() != null) {
-                mDataString = response.getmContentString();
+            if (response.getContentString() != null) {
+                mDataString = response.getContentString();
             }
-            if (response.ismIsCache()) {
-                mIsCache = response.ismIsCache();
+            if (response.isIsCache()) {
+                mIsCache = response.isIsCache();
             }
 
-            if (response.getmException() != null) {
-                mExceptionCause = response.getmException().toString();
-                mExceptionMessage = response.getmException().getMessage();
+            if (response.getException() != null) {
+                mExceptionCause = response.getException().toString();
+                mExceptionMessage = response.getException().getMessage();
             }
 
             mExceptionType = apiManagerExceptionMessage;

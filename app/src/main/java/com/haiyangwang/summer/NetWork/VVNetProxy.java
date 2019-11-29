@@ -1,6 +1,5 @@
 package com.haiyangwang.summer.NetWork;
 
-
 import android.util.Log;
 
 import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
@@ -10,6 +9,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+//
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -28,6 +28,7 @@ import okio.BufferedSource;
  * */
 public class VVNetProxy extends Object {
 
+    private static final String TAG = "VVNetProxy";
     private Map<Number, Call> requestMap = new HashMap<>();
     public interface VVNetResponseCallBack {
 
@@ -47,26 +48,25 @@ public class VVNetProxy extends Object {
 
 
     // Get
-    public Number getApiRequest(String apiAddress, Map<String, String> params, final VVNetResponseCallBack callBack) {
+    public Number getApiRequest(VVRequest request, final VVNetResponseCallBack callBack) {
 
-        return startRequestWith("GET",apiAddress,params,callBack);
-
+        return startRequestWith("GET",request.getUrl(),null,callBack);
     }
 
     // Post
-    public Number postApiRequest(String apiAddress, Map<String, String> params, final VVNetResponseCallBack callBack) {
+    public Number postApiRequest(VVRequest request, final VVNetResponseCallBack callBack) {
 
 
-        return startRequestWith("POST",apiAddress,params,callBack);
+        return startRequestWith("POST",request.getUrl(),request.getBody(),callBack);
     }
 
-    public  Number callApi(VVPublicDefines.ManagerRequestType type, String apiAddress, Map<String, String> params, final VVNetResponseCallBack callBack) {
+    public  Number callApi(VVRequest request, final VVNetResponseCallBack callBack) {
 
-       if (type == VVPublicDefines.ManagerRequestType.GET) {
-           return startRequestWith("GET",apiAddress,params,callBack);
+       if (request.getRequestType() == VVPublicDefines.ManagerRequestType.GET) {
+           return startRequestWith("GET",request.getUrl(),null,callBack);
        }
-        if (type == VVPublicDefines.ManagerRequestType.POST) {
-            return startRequestWith("POST",apiAddress,params,callBack);
+        if (request.getRequestType() == VVPublicDefines.ManagerRequestType.POST) {
+            return startRequestWith("POST",request.getUrl(),request.getBody(),callBack);
         }
        return 0;
     }
@@ -156,23 +156,13 @@ public class VVNetProxy extends Object {
 
 
         if (method == "GET") {
-
-            if (params == null || params.isEmpty()) {
-                return new Request.Builder().url(apiAddress).get().build();
-            }
-            // join api and params
-            StringBuilder paramsStr = new StringBuilder();
-            for (String key: params.keySet()) {
-
-                paramsStr.append(key+"="+params.get(key)+"&");
-            }
-            paramsStr.deleteCharAt(paramsStr.length()-1);
-            String fullApiAddress = apiAddress+"?"+paramsStr.toString();
-            return new Request.Builder().url(fullApiAddress).get().build();
+            Log.d(TAG, "generatorRequest: Get");
+            // 此时apiAddress 已经是完整的地址
+            return new Request.Builder().url(apiAddress).get().build();
 
         }
         if (method == "POST") {
-
+            Log.d(TAG, "generatorRequest: Post");
             if (params == null || params.isEmpty()) {
                 return new Request.Builder().url(apiAddress).post(new FormBody.Builder().build()).build();
             }

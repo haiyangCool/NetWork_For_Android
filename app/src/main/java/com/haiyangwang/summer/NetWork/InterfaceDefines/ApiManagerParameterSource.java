@@ -8,6 +8,6 @@ import java.util.Map;
  * */
 public interface ApiManagerParameterSource {
 
-    /* 配置参数 get-post*/
+    /* 配置参数 */
     Map<String,String> getParametersForApi(VVBaseApiManager manager);
 }

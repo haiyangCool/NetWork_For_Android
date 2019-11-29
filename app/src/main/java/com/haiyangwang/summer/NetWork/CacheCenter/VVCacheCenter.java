@@ -39,7 +39,7 @@ public class VVCacheCenter extends Object{
                                     String apiName,
                                     Map<String,String> params,
                                     int cacheTime) {
-        mDiskCacheCenter.saveCacheDataWith(response.getmContentString(),
+        mDiskCacheCenter.saveCacheDataWith(response.getContentString(),
                 generatorCacheKey(methodIdentifier,apiName,params),
                 cacheTime);
 
@@ -53,10 +53,10 @@ public class VVCacheCenter extends Object{
                 params));
         if (obj != null) {
             VVURLResponse response = (VVURLResponse)obj.getContent();
-            response.setmIsCache(true);
-            response.setmMethod(methodIdentifier);
-            response.setmRequestUrl(apiName);
-            response.setmRequestParams(params);
+            response.setIsCache(true);
+            response.setMethod(methodIdentifier);
+            response.setRequestUrl(apiName);
+            response.setRequestParams(params);
             return response;
         }
         return null;

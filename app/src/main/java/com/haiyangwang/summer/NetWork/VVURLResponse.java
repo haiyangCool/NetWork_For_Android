@@ -159,15 +159,15 @@ public class VVURLResponse extends Object {
     }
 
     /**gettter*/
-    public VVURLResponseStatus getmStatus() {
+    public VVURLResponseStatus getStatus() {
         return mStatus;
     }
 
-    public int getmRequestId() {
+    public int getRequestId() {
         return mRequestId;
     }
 
-    public String getmContentString() {
+    public String getContentString() {
         return mContentString;
     }
 
@@ -175,15 +175,15 @@ public class VVURLResponse extends Object {
         return mResponseData;
     }
 
-    public String getmMethod() {
+    public String getMethod() {
         return mMethod;
     }
 
-    public String getmRequestUrl() {
+    public String getRequestUrl() {
         return mRequestUrl;
     }
 
-    public Map<String, String> getmRequestParams() {
+    public Map<String, String> getRequestParams() {
         return mRequestParams;
     }
 
@@ -191,35 +191,35 @@ public class VVURLResponse extends Object {
         return mContent;
     }
 
-    public Exception getmException() {
+    public Exception getException() {
         return mException;
     }
 
-    public String getmLog() {
+    public String getLog() {
         return mLog;
     }
 
-    public boolean ismIsCache() {
+    public boolean isIsCache() {
         return mIsCache;
     }
 
-    public void setmIsCache(boolean mIsCache) {
+    public void setIsCache(boolean mIsCache) {
         this.mIsCache = mIsCache;
     }
 
-    public void setmRequestUrl(String mRequestUrl) {
+    public void setRequestUrl(String mRequestUrl) {
         this.mRequestUrl = mRequestUrl;
     }
 
-    public void setmRequestParams(Map<String, String> mRequestParams) {
+    public void setRequestParams(Map<String, String> mRequestParams) {
         this.mRequestParams = mRequestParams;
     }
 
-    public void setmMethod(String mMethod) {
+    public void setMethod(String mMethod) {
         this.mMethod = mMethod;
     }
 
-    public void setmLog(String mLog) {
+    public void setLog(String mLog) {
         this.mLog = mLog;
     }
 }

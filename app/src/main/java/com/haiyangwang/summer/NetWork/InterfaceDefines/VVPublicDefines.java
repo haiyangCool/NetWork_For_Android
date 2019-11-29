@@ -28,26 +28,37 @@ public class VVPublicDefines {
 
     /* Api 请求失败类型*/
     public enum RequestFailureType {
+
         // 缺失AccessToken或token过期
-        lackAccessToken,
+        lackAccessToken("Token已过期"),
         // 需要登录
-        needLogin,
+        needLogin("需要登录"),
         // 默认错误，没有进行网络请求
-        defaultException,
+        defaultException("没有进行网络请求"),
         //请求超时
-        timeOut,
+        timeOut("请求超时"),
         //参数错误
-        parameterException,
+        parameterException("参数错误"),
         //返回的数据异常
-        resultNotCorrect,
+        resultNotCorrect("服务器数据异常"),
         //断开了网络连接
-        loseNet,
+        loseNet("您似乎断开了网络连接"),
         //网络异常
-        netException,
+        netException("网络异常"),
         // 服务器数据解析出错
-        serviceDataDecodeError,
+        serviceDataDecodeError("服务器数据解析出错"),
         // 没有错误
-        noException
+        noException("未发生错误");
+
+        private final String rawValue;
+
+        private RequestFailureType(String rawValue) {
+            this.rawValue = rawValue;
+        }
+
+        public String rawValue() {
+            return this.rawValue;
+        }
 
     }
 }
