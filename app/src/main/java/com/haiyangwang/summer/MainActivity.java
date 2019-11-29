@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        getHomePageApiManager().loadData();
+        getHomePageApiManager().loadData();
 
         mShufflingView = findViewById(R.id.shuffling);
         mSearchBar = findViewById(R.id.search_bar);
@@ -81,28 +81,31 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void managerCallApiDidSuccess(VVBaseApiManager manager) {
+        boolean flag = manager.equals(homePageApiManager);
+        if (manager == homePageApiManager) {
+            Object data = manager.fetchResponseDataWithReformer(null);
+            Log.d(TAG, "managerCallApiDidSuccess: "+data);
 
-        if (manager.equals(HomePageApiManager.class)) {
-            Log.d(TAG,"success"+manager.fetchResponseDataWithReformer(null));
+        }
+        
+        if (manager.getClass() == HomePageApiManager.class) {
+            Log.d(TAG, "managerCallApiDidSuccess: this is a Home class");
         }
     }
 
     @Override
     public void managerCallApiManagerFaild(VVBaseApiManager manager) {
-
-        if (manager.getClass().equals(HomePageApiManager.class)) {
-            Log.d(TAG,"HomePageApiManager faild"+manager);
-        }
-
-        if (manager.getClass().equals(HomePageApiManager.class)) {
-            Log.d(TAG,"HomePageApiManager faild"+manager.fetchFailureReason());
+        Log.d(TAG, "managerCallApiManagerFaild: ");
+        if (manager == homePageApiManager) {
+            String faildReason = manager.fetchFailureReason();
+            Log.d(TAG, "managerCallApiManagerFaild: "+faildReason);
         }
     }
 
     public HomePageApiManager getHomePageApiManager() {
         if (homePageApiManager == null) {
             homePageApiManager = new HomePageApiManager();
-            homePageApiManager.setmDelegate(new WeakReference<>(this));
+            homePageApiManager.setDelegate(this);
         }
         return  homePageApiManager;
     }

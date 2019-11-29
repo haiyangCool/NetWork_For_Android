@@ -9,7 +9,6 @@ import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
 import com.haiyangwang.summer.NetWork.VVURLResponse;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,24 +19,25 @@ public class HomePageApiManager extends VVBaseApiManager implements
 
     public HomePageApiManager() {
 
-        setmChild(new WeakReference<>(this));
-        setmValidator(new WeakReference<>(this));
-        setmParamSource(new WeakReference<>(this));
+        setChild(this);
+        setValidator(this);
+        setParamSource(this);
     }
 
     @Override
-    public WeakReference<ApiManagerService> getService() {
-        return new WeakReference<>(new HomeService());
+    public ApiManagerService getService() {
+        return new HomeService();
+    }
+
+
+    @Override
+    public String getApiAddress() {
+        return "carousel/getList.json";
     }
 
     @Override
     public VVPublicDefines.ManagerRequestType getRequestType() {
         return VVPublicDefines.ManagerRequestType.GET;
-    }
-
-    @Override
-    public String getApiAddress() {
-        return "carousel/getList.json";
     }
 
     @Override
