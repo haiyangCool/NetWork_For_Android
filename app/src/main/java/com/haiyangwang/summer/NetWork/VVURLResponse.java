@@ -13,10 +13,21 @@ public class VVURLResponse extends Object {
      * */
     public enum VVURLResponseStatus {
         // 除了网络请求超时，其他的异常全部当做网络异常来处理
-        success,
-        timeOut,
-        netException,
-        dataDecodeException
+        success("Success"),
+        timeOut("请求超时"),
+        netException("网络异常"),
+        dataDecodeException("服务器数据解析失败");
+
+        private final String rawValue;
+
+        private VVURLResponseStatus(String rawValue) {
+            this.rawValue = rawValue;
+        }
+
+        public String rawValue() {
+            return this.rawValue;
+        }
+
     }
 
     // response状态
@@ -38,6 +49,10 @@ public class VVURLResponse extends Object {
     private Exception mException;
     // 是否为缓存数据
     private boolean mIsCache;
+    // 请求开始时间
+    private long requestStartTime;
+    // 请求结束时间
+    private long requestEndTime;
     // log
     private String mLog = "";
 
@@ -158,7 +173,7 @@ public class VVURLResponse extends Object {
         return VVURLResponseStatus.netException;
     }
 
-    /**gettter*/
+    /*Getter*/
     public VVURLResponseStatus getStatus() {
         return mStatus;
     }
@@ -203,6 +218,16 @@ public class VVURLResponse extends Object {
         return mIsCache;
     }
 
+    public long getRequestStartTime() {
+        return requestStartTime;
+    }
+
+    public long getRequestEndTime() {
+        return requestEndTime;
+    }
+
+    /*Setter*/
+
     public void setIsCache(boolean mIsCache) {
         this.mIsCache = mIsCache;
     }
@@ -217,6 +242,14 @@ public class VVURLResponse extends Object {
 
     public void setMethod(String mMethod) {
         this.mMethod = mMethod;
+    }
+
+    public void setRequestStartTime(long requestStartTime) {
+        this.requestStartTime = requestStartTime;
+    }
+
+    public void setRequestEndTime(long requestEndTime) {
+        this.requestEndTime = requestEndTime;
     }
 
     public void setLog(String mLog) {

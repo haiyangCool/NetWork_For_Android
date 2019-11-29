@@ -106,6 +106,7 @@ public class VVNetProxy extends Object {
         final Map<String,String> requestParams = params;
         final Request request = generatorRequest(method,apiAddress,requestParams);
         OkHttpClient okHttpClient = new OkHttpClient();
+        final long startTimeMills = System.currentTimeMillis();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -119,7 +120,9 @@ public class VVNetProxy extends Object {
                         requestParams,
                         faildRequest.hashCode(),
                         e);
-
+                long endTimeMills = System.currentTimeMillis();
+                response.setRequestStartTime(startTimeMills);
+                response.setRequestEndTime(endTimeMills);
                 callBack.responseFaild(response);
 
             }
@@ -141,6 +144,9 @@ public class VVNetProxy extends Object {
                         requestParams,
                         successRequest.hashCode(),
                         VVURLResponse.VVURLResponseStatus.success);
+                long endTimeMills = System.currentTimeMillis();
+                successResponse.setRequestStartTime(startTimeMills);
+                successResponse.setRequestEndTime(endTimeMills);
                 callBack.responseSuccess(successResponse);
             }
         });

@@ -11,15 +11,16 @@ public class VVLog extends Object {
     private static Boolean mIsCache = false;
     private static String mExceptionCause = null;
     private static String mExceptionMessage = null;
-
-
+    private static String mRequestStartTime = null;
+    private static String mRequestEndTime = null;
 
     public static String logApiRequestWithResponse(VVURLResponse response, String apiManagerExceptionMessage) {
         StringBuilder builder = new StringBuilder();
         builder.append("VVLog:*****************************************************  \n");
         if (response != null) {
+
             if (response.getStatus() != null) {
-                mState = response.getStatus().toString();
+                mState = response.getStatus().rawValue();
             }
             if (response.getRequestUrl() != null) {
                 mApiName = response.getRequestUrl();
@@ -42,26 +43,37 @@ public class VVLog extends Object {
                 mExceptionMessage = response.getException().getMessage();
             }
 
+            long startTime = response.getRequestStartTime();
+            long endTime = response.getRequestEndTime();
+            long minusTime = endTime - startTime;
+
+            mRequestStartTime = startTime + "（毫秒级）";
+            mRequestEndTime = endTime + "（毫秒级）";
+            String mMinusTime = minusTime + "（毫秒级）";
+
             mExceptionType = apiManagerExceptionMessage;
-            builder.append("VV Service Response State: == " + mState + ".\n");
-            builder.append("VV Response Exception by Api Manager Define: == " + mExceptionType + ".\n");
+
+            builder.append("VV：响应状态:\t" + mState + ".\n");
+            builder.append("VV：自定义异常类型:\t" + mExceptionType + ".\n");
             if (mIsCache == true) {
-                builder.append("VV Request Response isCache == " + mIsCache + ", 加载缓存，未进行网络请求"+ ".\n");
+                builder.append("VV：是否加载的缓存:\t" + mIsCache + ", 加载缓存，未进行网络请求"+ ".\n");
             }else {
-                builder.append("VV Request Response isCache == " + mIsCache + ".\n");
+                builder.append("VV：是否加载的缓存:\t" + mIsCache + ".\n");
             }
-            builder.append("VV Request Service Exception cause == " + mExceptionCause + ".\n");
-            builder.append("VV Request Service Exception message == " + mExceptionMessage + ".\n");
-            builder.append("VV Request Url address == " + mApiName + ".\n");
-            builder.append("VV Request type == " + mRequestType + ".\n");
-            builder.append("VV Request Params == " + mRequestParams + ".\n");
-            builder.append("VV Request Response DataStr == " + mDataString + ".\n");
+            builder.append("VV：网络服务异常发生原因:\t" + mExceptionCause + ".\n");
+            builder.append("VV：网络服务异常信息:\t" + mExceptionMessage + ".\n");
+            builder.append("VV：Api地址:\t" + mApiName + ".\n");
+            builder.append("VV：请求类型:\t" + mRequestType + ".\n");
+            builder.append("VV：请求参数:\t" + mRequestParams + ".\n");
+            builder.append("VV：请求开始时间:\t" + mRequestStartTime + ".\n" );
+            builder.append("VV：请求结束时间:\t" + mRequestEndTime + ".\n" );
+            builder.append("VV：请求用时:\t" + mMinusTime + ".\n" );
 
-
-            builder.append("VV Log end**************************************************************");
-
+            builder.append("VV：服务器原始数据:\t" + mDataString + ".\n");
 
         }
+        builder.append("VV Log end**************************************************************");
+
         return new String(builder);
     }
 
