@@ -2,6 +2,7 @@ package com.haiyangwang.summer.NetWork;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 
@@ -49,7 +50,7 @@ public class VVRequest {
         this.requestType = requestType;
         this.url = url;
         if (requestType == VVPublicDefines.ManagerRequestType.GET) {
-            if (params == null || params.isEmpty()) {
+            if (params != null || !params.isEmpty()) {
                 // join api and params
                 StringBuilder paramsStr = new StringBuilder();
                 for (String key: params.keySet()) {
@@ -73,6 +74,7 @@ public class VVRequest {
             this.body = params;
         }
 
+        Log.d("ss", "request: "+this.url);
         return this;
     }
 

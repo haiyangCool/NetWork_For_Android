@@ -98,14 +98,14 @@ public abstract class VVBaseApiManager extends Object {
         return this.rawResponse;
     }
 
-    // 失败信息 Debug
-    public String fetchFailureReason() {
+    // 获取请求的Log Debug
+    public String fetchLog() {
         return rawResponse.getLog();
     }
 
     // 失败原因,根据不同的失败原因可以做定制化操作
-    public VVPublicDefines.RequestFailureType fetchFailureType() {
-        return failureType;
+    public String fetchFailureType() {
+        return failureType.rawValue();
     }
 
     // 取消请求by id

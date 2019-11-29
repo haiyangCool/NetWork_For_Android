@@ -156,13 +156,13 @@ public class VVNetProxy extends Object {
 
 
         if (method == "GET") {
-            Log.d(TAG, "generatorRequest: Get");
+            Log.d(TAG, "generatorRequest: Get api ="+apiAddress);
             // 此时apiAddress 已经是完整的地址
             return new Request.Builder().url(apiAddress).get().build();
 
         }
         if (method == "POST") {
-            Log.d(TAG, "generatorRequest: Post");
+            Log.d(TAG, "generatorRequest: Post api = "+apiAddress);
             if (params == null || params.isEmpty()) {
                 return new Request.Builder().url(apiAddress).post(new FormBody.Builder().build()).build();
             }
