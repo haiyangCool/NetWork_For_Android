@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class VVURLResponse extends Object {
 
+    private static final String TAG  = "VVURLResponse";
     /** 作为api请求的直接数据接收者，这里不考虑返回的数据是否为空或者可用，
      * */
     public enum VVURLResponseStatus {
@@ -42,7 +43,7 @@ public class VVURLResponse extends Object {
     // request url
     private String mRequestUrl;
     // request body
-    private Map<String,String> mRequestParams;
+    private Map<String ,String> mRequestParams;
     // 服务器数据
     private JSONObject mContent;
     // 错误
@@ -87,7 +88,6 @@ public class VVURLResponse extends Object {
             }
         }
 
-
         return this;
 
     }
@@ -115,7 +115,7 @@ public class VVURLResponse extends Object {
 
     }
 
-    public VVURLResponse transformStrignToResponse(String dataStr) {
+    public VVURLResponse transformStringToResponse(String dataStr) {
 
         this.mContentString = dataStr;
         this.mMethod = "";
@@ -202,7 +202,7 @@ public class VVURLResponse extends Object {
         return mRequestParams;
     }
 
-    public JSONObject getmContent() {
+    public JSONObject getContent() {
         return mContent;
     }
 

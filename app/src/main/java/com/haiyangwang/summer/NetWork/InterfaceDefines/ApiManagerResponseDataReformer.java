@@ -1,6 +1,7 @@
 package com.haiyangwang.summer.NetWork.InterfaceDefines;
 
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
+import com.haiyangwang.summer.NetWork.VVURLResponse;
 
 /*  Data Reformer
  *  reformer 充当数据适配器
@@ -13,6 +14,6 @@ public interface ApiManagerResponseDataReformer {
     /* 这里的reformer一般用来格式化数据之后，一字典的形式抛出
      * 但不要被这种形式固定，它完全可以当做适配器，把数据和View组合后，抛出View
      * */
-    Object reformerData(VVBaseApiManager manager, Object jsonString);
+    Object reformerData(VVBaseApiManager manager, String jsonString);
 }
 

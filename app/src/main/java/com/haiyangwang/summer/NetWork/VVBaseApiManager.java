@@ -93,9 +93,9 @@ public abstract class VVBaseApiManager extends Object {
     public Object fetchResponseDataWithReformer(ApiManagerResponseDataReformer reformer) {
 
         if (reformer != null) {
-            return reformer.reformerData(this,rawResponse);
+            return reformer.reformerData(this,rawResponse.getContentString());
         }
-        return this.rawResponse;
+        return this.rawResponse.getContentString();
     }
 
     // 获取请求的Log Debug
@@ -109,7 +109,7 @@ public abstract class VVBaseApiManager extends Object {
     }
 
     // 取消请求by id
-    public void cancelReqeustById(int requestId) {
+    public void cancelRequestById(int requestId) {
 
         Number requestO = (Number)requestId;
         if (getRequestList().contains(requestO)) {
@@ -261,7 +261,7 @@ public abstract class VVBaseApiManager extends Object {
         }
 
         // 移除该请求
-        cancelReqeustById(response.getRequestId());
+        cancelRequestById(response.getRequestId());
 
         if (rawResponse.isIsCache() == false) {
             if (mChild != null) {
@@ -314,7 +314,7 @@ public abstract class VVBaseApiManager extends Object {
         if (response != null) {
             rawResponse = response;
             // 移除该请求
-            cancelReqeustById(response.getRequestId());
+            cancelRequestById(response.getRequestId());
         }
 
         if (response.getStatus() == VVURLResponse.VVURLResponseStatus.timeOut) {

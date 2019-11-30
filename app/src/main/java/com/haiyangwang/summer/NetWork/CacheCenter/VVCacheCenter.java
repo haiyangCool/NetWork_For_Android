@@ -69,7 +69,7 @@ public class VVCacheCenter extends Object{
                 apiName,
                 params));
         if (responseStr != null && responseStr != "") {
-            VVURLResponse response = new VVURLResponse().transformStrignToResponse(responseStr);
+            VVURLResponse response = new VVURLResponse().transformStringToResponse(responseStr);
             return  response;
         }
         return null;
