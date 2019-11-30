@@ -2,6 +2,7 @@ package com.haiyangwang.summer.HomePage;
 
 
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManager;
+import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerLoadNextPage;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerParameterSource;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerService;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerValidator;
@@ -15,7 +16,9 @@ import java.util.Map;
 public class HomePageApiManager extends VVBaseApiManager implements
         ApiManager,
         ApiManagerValidator,
-        ApiManagerParameterSource {
+        ApiManagerParameterSource,
+        ApiManagerLoadNextPage {
+
 
     public HomePageApiManager() {
 
@@ -26,7 +29,7 @@ public class HomePageApiManager extends VVBaseApiManager implements
 
     @Override
     public ApiManagerService getService() {
-        return new HomeService();
+        return HomeService.getInstance();
     }
 
 
@@ -67,5 +70,10 @@ public class HomePageApiManager extends VVBaseApiManager implements
     @Override
     public VVPublicDefines.RequestFailureType getParamIsCorrect(VVBaseApiManager manager, Map<String, String> params) {
         return VVPublicDefines.RequestFailureType.noException;
+    }
+
+    @Override
+    public void loadNextPage() {
+
     }
 }

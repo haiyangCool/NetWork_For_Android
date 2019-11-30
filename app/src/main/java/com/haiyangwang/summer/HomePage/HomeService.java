@@ -7,8 +7,12 @@ import com.haiyangwang.summer.NetWork.VVURLResponse;
 
 public class HomeService implements ApiManagerService {
 
-    public HomeService() {
-
+    private HomeService() {}
+    private static class HomeServiceHolder {
+        private static  final HomeService instance = new HomeService();
+    }
+    public static final HomeService getInstance() {
+        return HomeServiceHolder.instance;
     }
 
     @Override
