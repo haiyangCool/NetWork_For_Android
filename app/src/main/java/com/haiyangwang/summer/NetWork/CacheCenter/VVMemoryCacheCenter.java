@@ -24,11 +24,11 @@ public class VVMemoryCacheCenter extends Object {
     /* 缓存数据*/
     public void saveCacheDataWith(Object cacheData, String key, int cacheTime){
 
-        savaDataWith(cacheData,key,cacheTime);
+        saveDataWith(cacheData,key,cacheTime);
     }
 
     /* 查找缓存*/
-    public CacheObject fetchCachaDataWith(String key) {
+    public CacheObject fetchCacheDataWith(String key) {
         return fetCacheDataWith(key);
     }
 
@@ -45,7 +45,7 @@ public class VVMemoryCacheCenter extends Object {
 
     /* Private methods*/
     // cache server response data
-    private void savaDataWith(Object cacheData,String key,int cacheTime) {
+    private void saveDataWith(Object cacheData,String key,int cacheTime) {
 
         // 保存数据之前，根据生成的key进行缓存查找，如果已经有该key对应的数据，则更新当前数据
         CacheObject cacheObj = (CacheObject) getLruCache().get(key);
