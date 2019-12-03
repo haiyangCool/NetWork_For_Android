@@ -19,7 +19,8 @@ import java.util.Map;
 
 public abstract class VVBaseApiManager extends Object {
 
-    //  WeakReference
+    private static final String TAG  = "VVBaseApiManager";
+
     private ApiManagerService mService;             // 服务方
 
     private ApiManager mChild;                      // 子类apiManager
@@ -181,6 +182,7 @@ public abstract class VVBaseApiManager extends Object {
             rawResponse = cacheResponse;
             successCallApi(cacheResponse);
             isLoading = false;
+
             return 0;
         }
 
@@ -201,6 +203,7 @@ public abstract class VVBaseApiManager extends Object {
         Number requstId = VVNetProxy.getInstance().callApi(request, new VVNetProxy.VVNetResponseCallBack() {
             @Override
             public void responseSuccess(VVURLResponse response) {
+
                 successCallApi(response);
             }
 
@@ -247,6 +250,7 @@ public abstract class VVBaseApiManager extends Object {
     private void successCallApi(VVURLResponse response) {
         isLoading = false;
         rawResponse = response;
+        failureMessage = VVPublicDefines.RequestFailureType.noException.rawValue();
         if (response.getStatus() != null && response.getStatus() == VVURLResponse.VVURLResponseStatus.dataDecodeException) {
             failureMessage = VVPublicDefines.RequestFailureType.serviceDataDecodeError.rawValue();
             faildCallApi(rawResponse, VVPublicDefines.RequestFailureType.serviceDataDecodeError);

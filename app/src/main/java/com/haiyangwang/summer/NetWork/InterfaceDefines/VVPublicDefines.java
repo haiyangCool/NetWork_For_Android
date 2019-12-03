@@ -46,7 +46,7 @@ public class VVPublicDefines {
         //网络异常
         netException("网络异常"),
         // 服务器数据解析出错
-        serviceDataDecodeError("服务器数据解析出错"),
+        serviceDataDecodeError("解析服务器数据出错"),
         // 没有错误
         noException("未发生错误");
 

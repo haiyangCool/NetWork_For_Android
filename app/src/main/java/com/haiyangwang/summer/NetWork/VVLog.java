@@ -1,7 +1,11 @@
 package com.haiyangwang.summer.NetWork;
 
+import android.util.Log;
+
+
 public class VVLog extends Object {
 
+    private static final String TAG  = "VVLog";
     private static String mState = null;
     private static String mExceptionType = null;
     private static String mApiName = null;
@@ -15,9 +19,12 @@ public class VVLog extends Object {
     private static String mRequestEndTime = null;
 
     public static String logApiRequestWithResponse(VVURLResponse response, String apiManagerExceptionMessage) {
+
         StringBuilder builder = new StringBuilder();
         builder.append("VVLog:*****************************************************  \n");
         if (response != null) {
+
+            mIsCache = response.isIsCache();
 
             if (response.getStatus() != null) {
                 mState = response.getStatus().rawValue();
@@ -34,9 +41,6 @@ public class VVLog extends Object {
             if (response.getContentString() != null) {
                 mDataString = response.getContentString();
             }
-            if (response.isIsCache()) {
-                mIsCache = response.isIsCache();
-            }
 
             if (response.getException() != null) {
                 mExceptionCause = response.getException().toString();
@@ -47,16 +51,19 @@ public class VVLog extends Object {
             long endTime = response.getRequestEndTime();
             long minusTime = endTime - startTime;
 
-            mRequestStartTime = startTime + "（毫秒级）";
-            mRequestEndTime = endTime + "（毫秒级）";
-            String mMinusTime = minusTime + "（毫秒级）";
+            mRequestStartTime = startTime + "（毫秒）";
+            mRequestEndTime = endTime + "（毫秒）";
+            String mMinusTime = minusTime + "（毫秒）";
 
             mExceptionType = apiManagerExceptionMessage;
 
             builder.append("VV：响应状态:\t" + mState + ".\n");
             builder.append("VV：自定义异常类型:\t" + mExceptionType + ".\n");
             if (mIsCache == true) {
-                builder.append("VV：是否加载的缓存:\t" + mIsCache + ", 加载缓存，未进行网络请求"+ ".\n");
+                mRequestStartTime = "0 （毫秒）";
+                mRequestEndTime = "0 （毫秒）";
+                mMinusTime = "0 （毫秒）";
+                builder.append("VV：是否加载的缓存:\t" + mIsCache + ", 加载缓存，不进行网络请求"+ ".\n");
             }else {
                 builder.append("VV：是否加载的缓存:\t" + mIsCache + ".\n");
             }
@@ -64,7 +71,17 @@ public class VVLog extends Object {
             builder.append("VV：网络服务异常信息:\t" + mExceptionMessage + ".\n");
             builder.append("VV：Api地址:\t" + mApiName + ".\n");
             builder.append("VV：请求类型:\t" + mRequestType + ".\n");
-            builder.append("VV：请求参数:\t" + mRequestParams + ".\n");
+            if (mRequestType.equals("GET")) {
+                if (mIsCache) {
+                    builder.append("VV：请求参数【加载缓存,无需网络请求,不拼接】:\t" + mRequestParams + ".\n");
+
+                }else {
+                    builder.append("VV：请求参数【参数拼接到URL】:\t" + mRequestParams + ".\n");
+                }
+            }
+            if (mRequestType.equals("POST")) {
+                builder.append("VV：请求参数【参数需放入请求体】:\t" + mRequestParams + ".\n");
+            }
             builder.append("VV：请求开始时间:\t" + mRequestStartTime + ".\n" );
             builder.append("VV：请求结束时间:\t" + mRequestEndTime + ".\n" );
             builder.append("VV：请求用时:\t" + mMinusTime + ".\n" );

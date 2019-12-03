@@ -1,6 +1,5 @@
 package com.haiyangwang.summer.NetWork;
 
-import android.util.Log;
 
 import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 
@@ -50,23 +49,23 @@ public class VVNetProxy extends Object {
     // Get
     public Number getApiRequest(VVRequest request, final VVNetResponseCallBack callBack) {
 
-        return startRequestWith("GET",request.getUrl(),null,callBack);
+        return startRequestWith("GET",request.getUrl(),request.getParams(),callBack);
     }
 
     // Post
     public Number postApiRequest(VVRequest request, final VVNetResponseCallBack callBack) {
 
 
-        return startRequestWith("POST",request.getUrl(),request.getBody(),callBack);
+        return startRequestWith("POST",request.getUrl(),request.getParams(),callBack);
     }
 
     public  Number callApi(VVRequest request, final VVNetResponseCallBack callBack) {
 
        if (request.getRequestType() == VVPublicDefines.ManagerRequestType.GET) {
-           return startRequestWith("GET",request.getUrl(),null,callBack);
+           return startRequestWith("GET",request.getUrl(),request.getParams(),callBack);
        }
         if (request.getRequestType() == VVPublicDefines.ManagerRequestType.POST) {
-            return startRequestWith("POST",request.getUrl(),request.getBody(),callBack);
+            return startRequestWith("POST",request.getUrl(),request.getParams(),callBack);
         }
        return 0;
     }
@@ -96,7 +95,7 @@ public class VVNetProxy extends Object {
         requestMap.clear();
     }
 
-    /* 可以在此处随时切换底层网络框架而不必影响上层的实现方式*/
+    /** 可以在此处随时切换底层网络框架而不必影响上层的实现方式*/
     //get post
     private Number startRequestWith(String method,
                                    String apiAddress,
@@ -162,13 +161,11 @@ public class VVNetProxy extends Object {
 
 
         if (method == "GET") {
-            Log.d(TAG, "generatorRequest: Get api ="+apiAddress);
             // 此时apiAddress 已经是完整的地址
             return new Request.Builder().url(apiAddress).get().build();
 
         }
         if (method == "POST") {
-            Log.d(TAG, "generatorRequest: Post api = "+apiAddress);
             if (params == null || params.isEmpty()) {
                 return new Request.Builder().url(apiAddress).post(new FormBody.Builder().build()).build();
             }

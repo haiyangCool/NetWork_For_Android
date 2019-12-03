@@ -2,7 +2,6 @@ package com.haiyangwang.summer.NetWork;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 
@@ -25,8 +24,8 @@ public class VVRequest {
     private @NonNull String url;
     // 头部参数 （可以为空）
     private @Nullable Map<String,String> headers;
-    // 请求体（可以为空）
-    private @Nullable Map<String,String> body;
+    // 请求参数（可以为空）
+    private @Nullable Map<String,String> params;
 
 
     /*为了应对各种奇葩的 get api，对参数的拼接方式
@@ -49,6 +48,7 @@ public class VVRequest {
 
         this.requestType = requestType;
         this.url = url;
+        this.params = params;
         if (requestType == VVPublicDefines.ManagerRequestType.GET) {
             if (params != null || !params.isEmpty()) {
                 // join api and params
@@ -71,10 +71,9 @@ public class VVRequest {
 
         // Post 请求直接发键值对参数原样返回，由 代理网络使用自己的 Request body
         if (requestType == VVPublicDefines.ManagerRequestType.POST) {
-            this.body = params;
+            this.params = params;
         }
 
-        Log.d("ss", "request: "+this.url);
         return this;
     }
 
@@ -95,7 +94,7 @@ public class VVRequest {
     }
 
     @Nullable
-    public Map<String, String> getBody() {
-        return body;
+    public Map<String, String> getParams() {
+        return params;
     }
 }
