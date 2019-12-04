@@ -10,6 +10,7 @@ import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
 import com.haiyangwang.summer.NetWork.VVURLResponse;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +23,9 @@ public class HomePageApiManager extends VVBaseApiManager implements
 
     public HomePageApiManager() {
 
-        setChild(this);
-        setValidator(this);
-        setParamSource(this);
+        setChild(new WeakReference<>(this));
+        setValidator(new WeakReference<>(this));
+        setParamSource(new WeakReference<>(this));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class HomePageApiManager extends VVBaseApiManager implements
 
     @Override
     public VVPublicDefines.CachePolicy getCachePolicy() {
-        return VVPublicDefines.CachePolicy.none;
+        return VVPublicDefines.CachePolicy.memory;
     }
 
     @Override
@@ -56,8 +57,8 @@ public class HomePageApiManager extends VVBaseApiManager implements
     @Override
     public Map<String, String> getParametersForApi(VVBaseApiManager manager) {
         Map<String ,String > params = new HashMap<>();
-        params.put("relationType","2");
         params.put("fixedParameter","home");
+        params.put("relationType","2");
         return params;
     }
 

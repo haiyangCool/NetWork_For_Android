@@ -13,6 +13,7 @@ import com.haiyangwang.summer.HomePage.HomePageApiManager;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerResultCallBackDelegate;
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements
     public HomePageApiManager getHomePageApiManager() {
         if (homePageApiManager == null) {
             homePageApiManager = new HomePageApiManager();
-            homePageApiManager.setDelegate(this);
+            homePageApiManager.setDelegate(new WeakReference<>(this));
         }
         return  homePageApiManager;
     }

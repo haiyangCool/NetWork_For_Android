@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/** 从Reformer中出去的数据是直接可用的，免去了二次转化，在Reformer中实现
+ * 部分的弱业务逻辑（弱业务逻辑一般是不会变的）*/
 public class FilmDataReformer implements ApiManagerResponseDataReformer {
     private static final String TAG  = "FilmDataReformer";
     public FilmDataReformer() {}
@@ -39,7 +40,7 @@ public class FilmDataReformer implements ApiManagerResponseDataReformer {
                    int filmId = dataObj.getIntValue("carouselContentId");
                    String filmImageAddress = dataObj.getString("carouselImageUrl");
 
-                   dataMap.put(FilmDataKey.FilmName,filmName);
+                   dataMap.put(FilmDataKey.FilmName,"电影："+filmName);
                    dataMap.put(FilmDataKey.FilmID,""+filmId);
                    dataMap.put(FilmDataKey.FilmImageAddress,filmImageAddress);
 
