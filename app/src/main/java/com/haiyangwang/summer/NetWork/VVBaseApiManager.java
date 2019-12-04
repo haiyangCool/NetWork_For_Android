@@ -12,6 +12,7 @@ import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerService;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerValidator;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +24,15 @@ public abstract class VVBaseApiManager extends Object {
 
     private ApiManagerService mService;             // 服务方
 
-    private ApiManager mChild;                      // 子类apiManager
+    private WeakReference<ApiManager> mChild;                      // 子类apiManager
 
-    private ApiManagerParameterSource mParamSource; // 参数提供
+    private WeakReference<ApiManagerParameterSource> mParamSource; // 参数提供
 
-    private ApiManagerValidator mValidator;         // 验证器
+    private WeakReference<ApiManagerValidator> mValidator;         // 验证器
 
-    private ApiManagerResultCallBackDelegate mDelegate; // 结果回调
+    private WeakReference<ApiManagerResultCallBackDelegate> mDelegate; // 结果回调
 
-    private ApiManagerInterceptor mInterceptor;     // 拦截器
+    private WeakReference<ApiManagerInterceptor> mInterceptor;     // 拦截器
 
     // 是否忽略缓存，shouldIgnoreCache为true是，则跳过缓存，直接进行网络请求
     private boolean shouldIgnoreCache = false;
@@ -66,7 +67,7 @@ public abstract class VVBaseApiManager extends Object {
 
         Map<String,String> mps = null;
         if (mParamSource != null) {
-            mps = mParamSource.getParametersForApi(this);
+            mps = mParamSource.get().getParametersForApi(this);
         }
         return loadDataWithParams(mps);
     }
@@ -77,7 +78,7 @@ public abstract class VVBaseApiManager extends Object {
         // 默认GET
         VVPublicDefines.ManagerRequestType requestType = VVPublicDefines.ManagerRequestType.GET;
         if (mChild != null) {
-            requestType = mChild.getRequestType();
+            requestType = mChild.get().getRequestType();
         }
         VVRequest request = VVRequest.getInstance().request(requestType,getApiAddress(),params);
 
@@ -132,7 +133,7 @@ public abstract class VVBaseApiManager extends Object {
     private int loadDataWithParams(Map<String,String > params) {
 
         if (mChild != null) {
-            mService = mChild.getService();
+            mService = mChild.get().getService();
         }else {
             throw new SecurityException("---------mChild 必须实现---------") ;
 
@@ -143,11 +144,11 @@ public abstract class VVBaseApiManager extends Object {
         }
         Map<String ,String> reformedParams = params;
         if (mChild != null) {
-            reformedParams = mChild.reformParams(params);
+            reformedParams = mChild.get().reformParams(params);
         }
 
         // 参数验证
-        if (mValidator != null && mValidator.getParamIsCorrect(this,reformedParams) != VVPublicDefines.RequestFailureType.noException) {
+        if (mValidator != null && mValidator.get().getParamIsCorrect(this,reformedParams) != VVPublicDefines.RequestFailureType.noException) {
             failureMessage = VVPublicDefines.RequestFailureType.parameterException.rawValue();
             faildCallApi(rawResponse, VVPublicDefines.RequestFailureType.parameterException);
             return 0;
@@ -156,7 +157,7 @@ public abstract class VVBaseApiManager extends Object {
         // 查看缓存
         if (mChild != null && !shouldIgnoreCache) {
 
-            VVPublicDefines.CachePolicy policy = mChild.getCachePolicy();
+            VVPublicDefines.CachePolicy policy = mChild.get().getCachePolicy();
             if (policy == VVPublicDefines.CachePolicy.memory) {
                 // 查找内存缓存
                 cacheResponse = loadFromMemory(reformedParams);
@@ -194,7 +195,7 @@ public abstract class VVBaseApiManager extends Object {
 
         VVPublicDefines.ManagerRequestType requestType = VVPublicDefines.ManagerRequestType.GET;
         if (mChild != null) {
-            requestType = mChild.getRequestType();
+            requestType = mChild.get().getRequestType();
         }
 
         isLoading = true;
@@ -232,7 +233,7 @@ public abstract class VVBaseApiManager extends Object {
     // 加载内存缓存
     private VVURLResponse loadFromMemory(Map<String,String> requestParams) {
 
-        VVURLResponse response = getCacheCenter().fetchMemoryCacheDataWith(mChild.getRequestType().toString(),
+        VVURLResponse response = getCacheCenter().fetchMemoryCacheDataWith(mChild.get().getRequestType().toString(),
                 getApiAddress(),
                 requestParams);
         return response;
@@ -240,7 +241,7 @@ public abstract class VVBaseApiManager extends Object {
 
     // 加载硬盘存储
     private VVURLResponse loadFromDisk(Map<String,String> requestParams) {
-        VVURLResponse response = getCacheCenter().fetchDiskCacheDataWith(mChild.getRequestType().toString(),
+        VVURLResponse response = getCacheCenter().fetchDiskCacheDataWith(mChild.get().getRequestType().toString(),
                 getApiAddress(),
                 requestParams);
         return response;
@@ -257,7 +258,7 @@ public abstract class VVBaseApiManager extends Object {
             return;
         }
 
-        if (mValidator != null && mValidator.getResponseIsCorrect(this,response) != VVPublicDefines.RequestFailureType.noException) {
+        if (mValidator != null && mValidator.get().getResponseIsCorrect(this,response) != VVPublicDefines.RequestFailureType.noException) {
             // 验证失败
             failureMessage = VVPublicDefines.RequestFailureType.resultNotCorrect.rawValue();
             faildCallApi(rawResponse,VVPublicDefines.RequestFailureType.resultNotCorrect);
@@ -270,29 +271,29 @@ public abstract class VVBaseApiManager extends Object {
         if (rawResponse.isIsCache() == false) {
             if (mChild != null) {
 
-                VVPublicDefines.CachePolicy cachePolicy = mChild.getCachePolicy();
+                VVPublicDefines.CachePolicy cachePolicy = mChild.get().getCachePolicy();
                 if (cachePolicy == VVPublicDefines.CachePolicy.memory) {
                     getCacheCenter().saveCacheByMemoryWith(response,
-                            mChild.getRequestType().toString(),
+                            mChild.get().getRequestType().toString(),
                             getApiAddress(),
                             response.getRequestParams()
                             ,memoryCacheTime);
                 }
                 if (cachePolicy == VVPublicDefines.CachePolicy.disk) {
                     getCacheCenter().saveCacheByDiskWith(response,
-                            mChild.getRequestType().toString(),
+                            mChild.get().getRequestType().toString(),
                             getApiAddress(),
                             response.getRequestParams(),
                             diskCacheTime);
                 }
                 if (cachePolicy == VVPublicDefines.CachePolicy.memoryAndDisk) {
                     getCacheCenter().saveCacheByMemoryWith(response,
-                            mChild.getRequestType().toString(),
+                            mChild.get().getRequestType().toString(),
                             getApiAddress(),
                             response.getRequestParams(),
                             memoryCacheTime);
                     getCacheCenter().saveCacheByDiskWith(response,
-                            mChild.getRequestType().toString(),
+                            mChild.get().getRequestType().toString(),
                             getApiAddress(),
                             response.getRequestParams(),
                             diskCacheTime);
@@ -303,7 +304,7 @@ public abstract class VVBaseApiManager extends Object {
 
         beforePerformSuccessWithResponse(rawResponse);
         if (mDelegate != null) {
-            mDelegate.managerCallApiDidSuccess(this);
+            mDelegate.get().managerCallApiDidSuccess(this);
         }
         afterPerformSuccessWithResponse(rawResponse);
 
@@ -343,7 +344,7 @@ public abstract class VVBaseApiManager extends Object {
         beforePerformFailureWithResponse(rawResponse);
 
         if (mDelegate != null) {
-            mDelegate.managerCallApiManagerFaild(this);
+            mDelegate.get().managerCallApiManagerFaild(this);
         }
 
         afterPerformFailureWithResponse(rawResponse);
@@ -358,7 +359,7 @@ public abstract class VVBaseApiManager extends Object {
             serviceAddress = mService.getServiceAddress();
         }
         if (mChild != null) {
-            apiAddress = mChild.getApiAddress();
+            apiAddress = mChild.get().getApiAddress();
         }
         return serviceAddress+apiAddress;
 
@@ -375,7 +376,7 @@ public abstract class VVBaseApiManager extends Object {
     public boolean beforePerformSuccessWithResponse(VVURLResponse response) {
 
         if (interceptorIsImplement()) {
-            return mInterceptor.beforePerformSuccessWithResponse(this,response);
+            return mInterceptor.get().beforePerformSuccessWithResponse(this,response);
         }
         return true;
     }
@@ -383,14 +384,14 @@ public abstract class VVBaseApiManager extends Object {
 
     public void afterPerformSuccessWithResponse(VVURLResponse response) {
         if (interceptorIsImplement()) {
-            mInterceptor.afterPerformSuccessWithResponse(this,response);
+            mInterceptor.get().afterPerformSuccessWithResponse(this,response);
         }
     }
 
 
     public boolean beforePerformFailureWithResponse(VVURLResponse response) {
         if (interceptorIsImplement()) {
-           return mInterceptor.beforePerformFailureWithResponse(this,response);
+           return mInterceptor.get().beforePerformFailureWithResponse(this,response);
         }
         return true;
     }
@@ -398,13 +399,13 @@ public abstract class VVBaseApiManager extends Object {
     public void afterPerformFailureWithResponse(VVURLResponse response) {
 
         if (interceptorIsImplement()) {
-            mInterceptor.afterPerformFailureWithResponse(this,response);
+            mInterceptor.get().afterPerformFailureWithResponse(this,response);
         }
     }
 
     public boolean beforePerformCallApiWithParams(Map<String, String> params) {
         if (interceptorIsImplement()) {
-            mInterceptor.beforePerformCallApiWithParams(this, params);
+            mInterceptor.get().beforePerformCallApiWithParams(this, params);
         }
         return true;
     }
@@ -412,13 +413,13 @@ public abstract class VVBaseApiManager extends Object {
     public void afterPerformCallApiWithParams(Map<String, String> params) {
 
         if (interceptorIsImplement()) {
-            mInterceptor.afterPerformCallApiWithParams(this, params);
+            mInterceptor.get().afterPerformCallApiWithParams(this, params);
         }
     }
 
     public void didReceivedResponse(VVURLResponse response) {
         if (interceptorIsImplement()) {
-            mInterceptor.didReceivedResponse(this, response);
+            mInterceptor.get().didReceivedResponse(this, response);
         }
     }
     // 无论子类或者其他类实现拦截器接口，必须全部实现，否是就认为没有实现
@@ -438,23 +439,23 @@ public abstract class VVBaseApiManager extends Object {
         this.mService = mService;
     }
 
-    public void setChild(ApiManager mChild) {
+    public void setChild(WeakReference<ApiManager> mChild) {
         this.mChild = mChild;
     }
 
-    public void setParamSource(ApiManagerParameterSource mParamSource) {
+    public void setParamSource(WeakReference<ApiManagerParameterSource> mParamSource) {
         this.mParamSource = mParamSource;
     }
 
-    public void setValidator(ApiManagerValidator mValidator) {
+    public void setValidator(WeakReference<ApiManagerValidator> mValidator) {
         this.mValidator = mValidator;
     }
 
-    public void setDelegate(ApiManagerResultCallBackDelegate mDelegate) {
+    public void setDelegate(WeakReference<ApiManagerResultCallBackDelegate> mDelegate) {
         this.mDelegate = mDelegate;
     }
 
-    public void setInterceptor(ApiManagerInterceptor mInterceptor) {
+    public void setInterceptor(WeakReference<ApiManagerInterceptor> mInterceptor) {
         this.mInterceptor = mInterceptor;
     }
 

@@ -4,45 +4,44 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
 
 import com.haiyangwang.summer.HomePage.FilmDataKey;
 import com.haiyangwang.summer.HomePage.FilmDataReformer;
 import com.haiyangwang.summer.HomePage.HomePageApiManager;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerResultCallBackDelegate;
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
-import com.haiyangwang.summer.NetWork.VVURLResponse;
-import com.haiyangwang.summer.SearchBar.SearchBar;
-import com.haiyangwang.summer.SearchBar.SearchView;
-import com.haiyangwang.summer.ShufflingView.ShufflingItem;
-import com.haiyangwang.summer.ShufflingView.ShufflingView;
 
-
-import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements
-        ApiManagerResultCallBackDelegate{
+        ApiManagerResultCallBackDelegate, View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     private HomePageApiManager homePageApiManager;
 
 
-    private ShufflingView mShufflingView;
-    private SearchBar mSearchBar;
-    private SearchView mSearchView;
-    private SearchView tSearchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button btn = findViewById(R.id.load);
+        btn.setOnClickListener(this);
 
         // loadData
         getHomePageApiManager().loadData();
 
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.load) {
+            getHomePageApiManager().loadData();
+        }
+    }
 
     @Override
     public void managerCallApiDidSuccess(VVBaseApiManager manager) {
@@ -57,9 +56,6 @@ public class MainActivity extends AppCompatActivity implements
             String filmImageAdr = filmInfo.get(FilmDataKey.FilmImageAddress);
 
 
-            Log.d(TAG, "managerCallApiDidSuccess: 影片信息："+"\n"+"name:"+filmName+"\n"
-                    +"id:"+filmId+"\n"
-                    +"imageAddress:"+filmImageAdr+"\n");
 
 
         }
@@ -85,13 +81,20 @@ public class MainActivity extends AppCompatActivity implements
     }
 }
 
-/*   mShufflingView = findViewById(R.id.shuffling);
-        mSearchBar = findViewById(R.id.search_bar);
+/*
 
-        mSearchView = new SearchView(this);
-        mSearchBar.setSearchUI(new WeakReference<>(mSearchView));
-        mSearchBar.setSearchLogic(new WeakReference<>(this));
+    private ShufflingView mShufflingView;
+    private SearchBar mSearchBar;
+    private SearchView mSearchView;
+    private SearchView tSearchView;
 
-        mShufflingView.setDataSource(new WeakReference<>(this));
-        mShufflingView.loadData();
-        mShufflingView.setDelegate(new WeakReference<>(this));*/
+    mShufflingView = findViewById(R.id.shuffling);
+    mSearchBar = findViewById(R.id.search_bar);
+
+    mSearchView = new SearchView(this);
+    mSearchBar.setSearchUI(new WeakReference<>(mSearchView));
+    mSearchBar.setSearchLogic(new WeakReference<>(this));
+
+    mShufflingView.setDataSource(new WeakReference<>(this));
+    mShufflingView.loadData();
+    mShufflingView.setDelegate(new WeakReference<>(this));*/
