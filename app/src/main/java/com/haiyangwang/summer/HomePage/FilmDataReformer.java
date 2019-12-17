@@ -22,15 +22,8 @@ public class FilmDataReformer implements ApiManagerResponseDataReformer {
         if (manager instanceof  HomePageApiManager) {
            if (!jsonString.isEmpty()) {
 
-               Map<String, Object> filmMap = new HashMap<>();
-
                JSONObject jsonObject = JSON.parseObject(jsonString);
-               String returnValue =  jsonObject.getString("return_value");
-               int returnCode = jsonObject.getIntValue("return_code");
                JSONArray dataList = jsonObject.getJSONArray("rows");
-
-                filmMap.put(FilmDataKey.Code,returnCode);
-                filmMap.put(FilmDataKey.Message,returnValue);
 
                List filmList = new ArrayList();
                for (int i = 0; i < dataList.size(); i++) {
@@ -40,15 +33,14 @@ public class FilmDataReformer implements ApiManagerResponseDataReformer {
                    int filmId = dataObj.getIntValue("carouselContentId");
                    String filmImageAddress = dataObj.getString("carouselImageUrl");
 
-                   dataMap.put(FilmDataKey.FilmName,"电影："+filmName);
-                   dataMap.put(FilmDataKey.FilmID,""+filmId);
-                   dataMap.put(FilmDataKey.FilmImageAddress,filmImageAddress);
+                   dataMap.put(FilmDataKey.FilmName,"电影名称："+filmName);
+                   dataMap.put(FilmDataKey.FilmID,"电影ID: "+filmId);
+                   dataMap.put(FilmDataKey.FilmImageAddress,"电影封面: "+filmImageAddress);
 
                    filmList.add(dataMap);
 
                }
-               filmMap.put(FilmDataKey.FilmInfo,filmList);
-               return filmMap;
+               return filmList;
 
 
            }

@@ -1,6 +1,8 @@
 package com.haiyangwang.summer.HomePage;
 
 
+import android.util.Log;
+
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManager;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerLoadNextPage;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerParameterSource;
@@ -10,21 +12,22 @@ import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
 import com.haiyangwang.summer.NetWork.VVURLResponse;
 
+import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HomePageApiManager extends VVBaseApiManager implements
         ApiManager,
-        ApiManagerValidator,
-        ApiManagerParameterSource,
-        ApiManagerLoadNextPage {
+//        ApiManagerValidator,
+        ApiManagerParameterSource {
 
 
     public HomePageApiManager() {
 
         setChild(new WeakReference<>(this));
-        setValidator(new WeakReference<>(this));
+        setValidator(new WeakReference<>(new HomeServiceValidator()));
         setParamSource(new WeakReference<>(this));
     }
 
@@ -46,7 +49,7 @@ public class HomePageApiManager extends VVBaseApiManager implements
 
     @Override
     public VVPublicDefines.CachePolicy getCachePolicy() {
-        return VVPublicDefines.CachePolicy.memory;
+        return VVPublicDefines.CachePolicy.none;
     }
 
     @Override
@@ -62,19 +65,5 @@ public class HomePageApiManager extends VVBaseApiManager implements
         return params;
     }
 
-    @Override
-    public VVPublicDefines.RequestFailureType getResponseIsCorrect(VVBaseApiManager manager, VVURLResponse response) {
 
-        return VVPublicDefines.RequestFailureType.noException;
-    }
-
-    @Override
-    public VVPublicDefines.RequestFailureType getParamIsCorrect(VVBaseApiManager manager, Map<String, String> params) {
-        return VVPublicDefines.RequestFailureType.noException;
-    }
-
-    @Override
-    public void loadNextPage() {
-
-    }
 }
