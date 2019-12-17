@@ -10,7 +10,9 @@ import android.widget.Button;
 import com.haiyangwang.summer.HomePage.FilmDataKey;
 import com.haiyangwang.summer.HomePage.FilmDataReformer;
 import com.haiyangwang.summer.HomePage.HomePageApiManager;
+import com.haiyangwang.summer.HomePage.HomeServiceErrorReformer;
 import com.haiyangwang.summer.NetWork.InterfaceDefines.ApiManagerResultCallBackDelegate;
+import com.haiyangwang.summer.NetWork.InterfaceDefines.VVPublicDefines;
 import com.haiyangwang.summer.NetWork.VVBaseApiManager;
 
 import java.lang.ref.WeakReference;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements
         btn.setOnClickListener(this);
 
         // loadData
-        getHomePageApiManager().loadData();
+//        getHomePageApiManager().loadData();
 
     }
 
@@ -47,17 +49,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void managerCallApiDidSuccess(VVBaseApiManager manager) {
         if (manager == homePageApiManager) {
-            Map<String, Object> dataMap = (Map<String, Object>) manager.fetchResponseDataWithReformer(new FilmDataReformer());
+            List<Map<String, String>> filmList = (List<Map<String, String>>) manager.fetchResponseDataWithReformer(new FilmDataReformer());
 
-            List filmList = (List) dataMap.get(FilmDataKey.FilmInfo);
-            // test
-            Map<String, String> filmInfo = (Map<String, String>) filmList.get(0);
-            String filmName = filmInfo.get(FilmDataKey.FilmName);
-            String filmId = filmInfo.get(FilmDataKey.FilmID);
-            String filmImageAdr = filmInfo.get(FilmDataKey.FilmImageAddress);
-
-
-
+            for (Map<String, String> filmInfo: filmList) {
+                String filmName = filmInfo.get(FilmDataKey.FilmName);
+                String filmId = filmInfo.get(FilmDataKey.FilmID);
+                String filmImageAdr = filmInfo.get(FilmDataKey.FilmImageAddress);
+                Log.d(TAG, "managerCallApiDidSuccess: \n"+filmName
+                        +"\n"+filmImageAdr
+                        +"\n"+filmId
+                        +"\n");
+            }
 
         }
     }
@@ -65,9 +67,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void managerCallApiManagerFaild(VVBaseApiManager manager) {
         if (manager == homePageApiManager) {
-            String faildReason = manager.fetchLog();
-            String faildType = manager.fetchFailureType();
-            Log.d(TAG, "managerCallApiManagerFaild: "+faildReason);
+            String faildLog = manager.fetchLog();
+            VVPublicDefines.RequestFailureType faildType = manager.fetchFailureType();
+            Map<String, String> errorInfo = (Map<String, String>) manager.fetchFaildResponseDataWithReformer(new HomeServiceErrorReformer());
+            Log.d(TAG, "managerCallApiManagerFaild: \n 错误类型 ："+faildType.rawValue() +"\n 错误信息" + errorInfo + "\nLog :"+faildLog);
         }
     }
 
