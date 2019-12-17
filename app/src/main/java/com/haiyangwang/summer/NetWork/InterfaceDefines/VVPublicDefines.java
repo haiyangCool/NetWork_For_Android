@@ -39,6 +39,7 @@ public class VVPublicDefines {
 
         parameterException("参数错误"),
 
+        // 在发生该错误时，可以通过解析response，获取服务器返回的具体的错误码和错误信息
         resultNotCorrect("服务器数据异常"),
 
         loseNet("您似乎断开了网络连接"),
@@ -49,6 +50,7 @@ public class VVPublicDefines {
 
         noException("未发生错误");
 
+
         private final String rawValue;
 
         private RequestFailureType(String rawValue) {
@@ -58,6 +60,7 @@ public class VVPublicDefines {
         public String rawValue() {
             return this.rawValue;
         }
+
 
     }
 }

@@ -92,7 +92,18 @@ public abstract class VVBaseApiManager extends Object {
     }
 
     // 获取响应数据
-    public Object fetchResponseDataWithReformer(ApiManagerResponseDataReformer reformer) {
+    public Object fetchResponseDataWithReformer(@Nullable ApiManagerResponseDataReformer reformer) {
+
+        if (reformer != null) {
+            return reformer.reformerData(this,rawResponse.getContentString());
+        }
+        return this.rawResponse.getContentString();
+    }
+
+    /* 获取失败数据
+    * 在网络请求发起失败后：有时需要获取服务方自定义的错误回执信息【一般都是  code， message 这两类】
+    * 通过传递每个 服务方 回执信息的 Reformer 格式化需要的 错误信息*/
+    public Object fetchFaildResponseDataWithReformer(@Nullable ApiManagerResponseDataReformer reformer) {
 
         if (reformer != null) {
             return reformer.reformerData(this,rawResponse.getContentString());
@@ -106,8 +117,8 @@ public abstract class VVBaseApiManager extends Object {
     }
 
     // 失败原因,根据不同的失败原因可以做定制化操作
-    public String fetchFailureType() {
-        return failureType.rawValue();
+    public VVPublicDefines.RequestFailureType fetchFailureType() {
+        return failureType;
     }
 
     // 取消请求by id
